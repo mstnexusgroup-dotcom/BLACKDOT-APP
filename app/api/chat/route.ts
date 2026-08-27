@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   try {
     const { message } = await req.json();
-
     const apikey = process.env.GROQ_API_KEY;
 
     if (!apikey) {
@@ -17,7 +16,7 @@ export async function POST(req: Request) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${apikey}`,
+        "Authorization": `Bearer ${apikey}`,
       },
       body: JSON.stringify({
         model: "llama-3.1-8b-instant",
@@ -28,10 +27,10 @@ export async function POST(req: Request) {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("Groq API error response:", data);
-      return NextResponse.json({
-        reply: `Groq API Error: ${data.error?.message || "Failed to reach Groq"}`,
-      });
+      return NextResponse.json(
+        { reply: data.error?.message || "Groq API error occurred." },
+        { status: response.status }
+      );
     }
 
     const reply = data.choices?.[0]?.message?.content || "No response received.";
