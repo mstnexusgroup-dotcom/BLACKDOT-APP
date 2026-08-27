@@ -20,7 +20,7 @@ export async function POST(req: Request) {
         Authorization: `Bearer ${apikey}`,
       },
       body: JSON.stringify({
-        model: "openai/gpt-oss-20b",
+        model: "llama-3.1-8b-instant",
         messages: [{ role: "user", content: message }],
       }),
     });
