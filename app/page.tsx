@@ -40,7 +40,7 @@ interface BookItem {
 }
 
 export default function BlackdotApp() {
-  const [activeTab, setActiveTab] = useState<"assistant" | "videos" | "news" | "business" | "library" | "profile">("videos");
+  const [activeTab, setActiveTab] = useState<"assistant" | "videos" | "news" | "business" | "library" | "profile">("profile");
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -76,14 +76,15 @@ export default function BlackdotApp() {
       type: "Free",
       description: "A comprehensive free guide to learning modern frontend development, DOM manipulation, and JavaScript fundamentals."
     },
-{
-  id: "free-2",
-  type: "free",
-  title: "Fundamentals of Business Strategy & Startups",
-  author: "Global Entrepreneurship Network",
-  category: "Business",
-  description: "...",
-},    {
+    {
+      id: "free-2",
+      type: "Free",
+      title: "Fundamentals of Business Strategy & Startups",
+      author: "Global Entrepreneurship Network",
+      category: "Business",
+      description: "Essential strategies for building, scaling, and managing modern startup companies effectively."
+    },
+    {
       id: "free-3",
       title: "Data Structures & Algorithms Made Easy",
       author: "Tech Academy",

@@ -5,12 +5,11 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export async function POST(req: Request) {
   try {
-    const { messages } = await req.json();
-    const lastMessage = messages[messages.length - 1]?.content || 'Hello';
+    const { message } = await req.json();
 
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
-      contents: lastMessage,
+      contents: message || 'Hello',
     });
 
     return NextResponse.json({ reply: response.text });
