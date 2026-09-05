@@ -1,45 +1,23 @@
-import { NextResponse } from "next/server";
+import { GoogleGenAI } from '@google/genai';
+import { NextResponse } from 'next/server';
+
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export async function POST(req: Request) {
   try {
-    const { message } = await req.json();
-    const apikey = process.env.GROQ_API_KEY;
+    const { messages } = await req.json();
+    const lastMessage = messages[messages.length - 1]?.content || 'Hello';
 
-    if (!apikey) {
-      return NextResponse.json(
-        { reply: "Server configuration error: GROQ_API_KEY is missing." },
-        { status: 500 }
-      );
-    }
-
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${apikey}`,
-      },
-      body: JSON.stringify({
-        model: "llama-3.1-8b-instant",
-        messages: [{ role: "user", content: message }],
-      }),
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: lastMessage,
     });
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      return NextResponse.json(
-        { reply: data.error?.message || "Groq API error occurred." },
-        { status: response.status }
-      );
-    }
-
-    const reply = data.choices?.[0]?.message?.content || "No response received.";
-    return NextResponse.json({ reply });
-
+    return NextResponse.json({ reply: response.text });
   } catch (error) {
-    console.error("Internal server error:", error);
+    console.error('Gemini API Error:', error);
     return NextResponse.json(
-      { reply: "Internal Server Error: Unable to process request." },
+      { reply: 'Internal Server Error: Unable to reach Gemini.' },
       { status: 500 }
     );
   }
